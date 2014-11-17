@@ -1,0 +1,29 @@
+[
+	{
+		"name": "Blackwater Park",
+		"artist": "Opeth",
+		"released": 2001,
+		"genres": ["Death Metal"]
+	},
+
+	{
+		"name": "A Twist in the Myth",
+		"artist": "Blind Guardian",
+		"released": 2006,
+		"genres": ["Power metal", "progressive metal"]
+	},
+
+	{
+		"name": "Renegades",
+		"artist": "Rage Against The Machine",
+		"released": 2000,
+		"genres": ["Rap metal", "alternative metal", "funk metal"]
+	},
+
+	{
+		"name": "Rage Against The Machine",
+		"artist": "Rage Against The Machine",
+		"released": 1992,
+		"genres": ["Rap metal", "alternative metal", "funk metal"]
+	}
+]

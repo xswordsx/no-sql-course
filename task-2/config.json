@@ -1,0 +1,9 @@
+{
+  "url": "localhost",
+  "port": 3000,
+  "db": {
+    "url": "localhost",
+    "port": 27017,
+    "db": "task2"
+  }
+}
