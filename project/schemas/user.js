@@ -10,4 +10,4 @@ var userSchema = new Schema({
 	verified: Boolean
 });
 
-exports = userSchema;
+module.exports = userSchema;

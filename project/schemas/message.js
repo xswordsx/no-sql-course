@@ -12,4 +12,4 @@ var messageSchema = new Schema({
 	tags: { type: [String], index: true }
 });
 
-exports = messageSchema;
+module.exports = messageSchema;
