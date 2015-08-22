@@ -10,4 +10,4 @@ var userSchema = new Schema({
 	verified: Boolean
 });
 
-module.exports = new mongoose.Model('User', userSchema);
+module.exports = mongoose.model('User', userSchema);

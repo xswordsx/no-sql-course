@@ -12,4 +12,4 @@ var messageSchema = new Schema({
 	tags: { type: [String], index: true }
 });
 
-module.exports = new mongoose.Model('Message', messageSchema);
+module.exports = mongoose.model('Message', messageSchema);
