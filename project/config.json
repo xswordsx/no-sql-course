@@ -1,8 +1,9 @@
 {
+	"secret": "magma is hot :(",
 	"port": 3000,
 	"mongo": {
 		"server": "localhost",
 		"port": 27017,
-		"db": "hirondu"
+		"db": "hirundo"
 	}
 }
