@@ -10,7 +10,7 @@ var jokeSchema = new Schema({
 	text: String,
 	author: String,
 	rating: { type: Number, min: 1, max: 10 },
-	heroes: [String],
+	characters: [String],
 	black_humor: { type: Boolean, required: false }
 });
 
@@ -32,7 +32,7 @@ mongoose.connect('mongodb://localhost:27017/jokes', function (err) {
 			if(process.argv[2] === '-d') {
 				lazyDrop();
 			} else {
-				blackHumor();
+				chuck_and_ivan();
 			}
 		}
 	});
@@ -52,6 +52,19 @@ function blackHumor() {
 					done();
 				}
 			});
+		}
+	});
+}
+
+function chuck_and_ivan() {
+	Joke.find({characters: {$in: ["Чък Норис", "Иванчо"]}},	undefined, {sort: {rating: 1}}, function(err, data) {
+		if (err) {
+			console.error(err);
+			done();
+		} else {
+			console.log('Chuck & Ivan:');
+			console.log(JSON.stringify(data, null, 2));
+			done();
 		}
 	});
 }
