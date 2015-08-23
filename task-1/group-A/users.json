@@ -1,0 +1,22 @@
+[
+	{
+		"name" : "Господин Бъзик",
+		"email": "joke_master@abv.bg",
+		"likes": [ "Бил Гейтс", "Чък Норис", "Чапай", "Петка" ]
+	},
+	{
+		"name" : "Госпоцижа Майтап",
+		"email": "plz_no_bann@yahoo.com",
+		"likes": [ "Popeye", "Сашо" ]
+	},
+	{
+		"name" : "Димитър Петров",
+		"email": "password1234@abv.bg",
+		"likes": [ "Дейзи", "Рик" ]
+	},
+	{
+		"name" : "Недялка",
+		"email": "nedityyy@mail.bg",
+		"likes": [ "Nafta", "BMVta", "ludata batka", "Adibas" ]
+	}
+]
