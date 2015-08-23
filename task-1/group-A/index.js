@@ -1,0 +1,80 @@
+// текст на вица, автор (име на
+// потребител от колекцията за потребители), рейтинг (число от 1 до 10), както и списък с
+// героите от вица. Документите от колекцията за потребители трябва да имат поне поле за
+// име, имейл адрес и списък от герои от вицове, които харесват.
+
+var mongoose = require('mongoose');
+var Schema = mongoose.Schema;
+
+var jokeSchema = new Schema({
+	text: String,
+	author: String,
+	rating: { type: Number, min: 1, max: 10 },
+	heroes: [String],
+	black_humor: { type: Boolean, required: false }
+});
+
+var userSchema = new Schema({
+	name: { type: String, unique: true },
+	email: { type: String, unique: true },
+	likes: [String]
+});
+
+var User = mongoose.model('User', userSchema);
+var Joke = mongoose.model('Joke', jokeSchema);
+
+
+mongoose.connect('mongodb://localhost:27017/jokes', function (err) {
+		if(err) {
+			console.error(err);
+			process.exit(-1);
+		} else {
+			if(process.argv[2] === '-d') {
+				lazyDrop();
+			} else {
+				blackHumor();
+			}
+		}
+	});
+function blackHumor() {
+	User.findOne({}, function(err, user) {
+		if (err) {
+			console.error(err);
+			process.exit(-2);
+		} else {
+			console.log('Updating jokes for', user.name);
+			Joke.update({author: user.name}, {$set: {black_humor: true}}, {multi: true}, function(err, n) {
+				if (err) {
+					console.error(err);
+					process.exit(-3);
+				} else {
+					console.log('Successfully labeled', n , 'jokes `black_humor`');
+					done();
+				}
+			});
+		}
+	});
+}
+
+function lazyDrop() {
+		User.remove({}, function(err, n) {
+			if(err) {
+				console.error('could not remove all users', err);
+			} else {
+				console.log('USERS', n.result);
+			}
+		});
+
+		Joke.remove({}, function(err, n) {
+			if(err) {
+				console.error('could not remove all jokes', err);
+			} else {
+				console.log('JOKES', n.result);
+			}
+			done();
+		});
+}
+
+function done() {
+	mongoose.disconnect();
+}
