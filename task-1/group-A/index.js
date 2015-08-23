@@ -32,7 +32,11 @@ mongoose.connect('mongodb://localhost:27017/jokes', function (err) {
 			if(process.argv[2] === '-d') {
 				lazyDrop();
 			} else {
-				chuck_and_ivan();
+				/* Pick one */
+				// blackHumor();
+				// chuck_and_ivan();
+				// removeLessThanThree();
+				// createdByCount();
 			}
 		}
 	});
@@ -69,6 +73,37 @@ function chuck_and_ivan() {
 	});
 }
 
+function removeLessThanThree() {
+	Joke.remove({rating: {$lte: 3}}, function(err, stats) {
+		if (err) {
+			console.error(err);
+		} else {
+			console.log('Removed', stats.result.n, 'documents');
+		}
+		done();
+	})
+}
+
+function createdByCount() {
+	User.findOne({}, function(err, doc) {
+		if (err) {
+			console.error(err);
+			done();
+		} else {
+			console.log('Checking jokes made by', doc.name);
+			Joke.count({author: doc.name}, function(err, count) {
+				if (err) {
+					console.error(err);
+				} else {
+					console.log('Found', count, 'documents');
+				}
+				done();
+			});
+		}
+	});
+}
+
+// Helper functions
 function lazyDrop() {
 		User.remove({}, function(err, n) {
 			if(err) {
