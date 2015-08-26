@@ -1,7 +1,11 @@
 <% include header %>
 
 <h1 id="mocha-error">
-    <%- message %>
+    <%- (typeof message !== 'undefined') ? message : 'Not the page you\'re looking for' %>
 </h1>
+
+<h3 id="mocha-error">
+    <%- (typeof subtext !== 'undefined') ? subtext : '' %>
+</h3>
 
 <% include footer %>

@@ -1,4 +1,3 @@
-var crypto = require('crypto');
 var express = require('express');
 var passport = require('passport');
 

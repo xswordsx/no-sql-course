@@ -23,7 +23,7 @@ var mongoString = util.format("mongodb://%s:%d/%s",
 mongoose.connect(mongoString, function (err) {
 	if (err) {
 		console.error(util.format('[%s]:\t%s', err.name, err.message));
-		process.exit(-1);
+		cleanup(-1);
 	} else {
 		setupApp(app);
 		app.listen(config.port || 3000, function() {
@@ -45,13 +45,15 @@ function setupApp (app) {
 
 	try {
 		var loginRouter = require('./routes/login');
+		var registerRouter = require('./routes/register');
 	} catch(e) {
 		console.error(e.message, e.stack);
-		process.exit(-2);
+		cleanup(-2);
 	}
 
 	app.use('/login', loginRouter);
-	
+	app.use('/register', registerRouter);
+
 	app.get('/', connect_ensure_login.ensureLoggedIn('/login'), function (req, res) {
 		res.render('index', {
 			title: 'Hirundo',
@@ -76,8 +78,8 @@ function setupApp (app) {
 	});
 }
 
-function cleanup () {
-	mongoose.disconnect(process.exit.bind(process, 0));
+function cleanup (x) {
+	mongoose.disconnect(process.exit.bind(process, x || 0));
 }
 
 process.on('exit', cleanup);
