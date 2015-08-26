@@ -23,7 +23,8 @@ var messageSchema = new Schema({
 	},
 	published: {
 		type: Date,
-		default: Date.now
+		default: Date.now,
+		index: -1
 	},
 	tags: {
 		type: [String],

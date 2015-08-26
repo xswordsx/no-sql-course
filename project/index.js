@@ -47,23 +47,27 @@ function setupApp (app) {
 		var loginRouter = require('./routes/login');
 		var registerRouter = require('./routes/register');
 		var tweetRouter = require('./routes/tweet');
+		var followRouter = require('./routes/follow');
 	} catch(e) {
 		console.error(e.message, e.stack);
 		cleanup(-2);
 	}
 
+	var ensureLoggedIn = connect_ensure_login.ensureLoggedIn('/login');
+
 	app.use('/login', loginRouter);
 	app.use('/register', registerRouter);
-	app.use('/tweet', connect_ensure_login.ensureLoggedIn('/login'), tweetRouter);
+	app.use('/tweet', ensureLoggedIn, tweetRouter);
+	app.use('/actions', ensureLoggedIn, followRouter);
 
-	app.get('/', connect_ensure_login.ensureLoggedIn('/login'), function (req, res) {
+	app.get('/', ensureLoggedIn, function (req, res) {
 		res.render('index', {
 			title: 'Hirundo',
 			user: req.user,
 			message: ''
 		});
 	});
-	app.get('/logout', connect_ensure_login.ensureLoggedIn('/login'), function(req, res) {
+	app.get('/logout', ensureLoggedIn, function(req, res) {
 		req.logout();
 		res.redirect('/login', {message: 'test'});
 	});
@@ -75,13 +79,13 @@ function setupApp (app) {
 			err.title = err.title || 'Hirundo - Error';
 			res.render('error', err);
 		} else {
-			res.render('403');
+			res.render('403', {title: 'Forbidden'});
 		}
 	});
 }
 
 function cleanup (x) {
-	mongoose.disconnect(process.exit.bind(process, x || 0));
+	mongoose.disconnect(process.exit.bind(process, x | 0));
 }
 
 process.on('exit', cleanup);
