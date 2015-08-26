@@ -46,6 +46,7 @@ function setupApp (app) {
 	try {
 		var loginRouter = require('./routes/login');
 		var registerRouter = require('./routes/register');
+		var tweetRouter = require('./routes/tweet');
 	} catch(e) {
 		console.error(e.message, e.stack);
 		cleanup(-2);
@@ -53,6 +54,7 @@ function setupApp (app) {
 
 	app.use('/login', loginRouter);
 	app.use('/register', registerRouter);
+	app.use('/tweet', connect_ensure_login.ensureLoggedIn('/login'), tweetRouter);
 
 	app.get('/', connect_ensure_login.ensureLoggedIn('/login'), function (req, res) {
 		res.render('index', {

@@ -1,37 +1,80 @@
 <% include header %>
+<style>
+	#button-tweet {
+		height: 3em;
+		font-size: 3em;
+	}
+
+	#info_message {
+		padding-top: 2em;
+		text-align: center;
+		font-size: 1.5em;
+	}
+
+	.error {
+		color: #e41a4d;
+	}
+
+	.success {
+		color: #1CB94E;
+	}
+</style>
+
 <nav class="navbar navbar-inverse navbar-static-top">
-    <div class="container">
-        <div class="navbar-header">
-            <a class="navbar-brand" href="#">
-                Hirondu
-            </a>
-        </div>
-        <ul class="nav navbar-nav">
-            <li><a href="/timeline">Timeline</a></li>
-            <li><a href="/profile">My Profile</a></li>
-        </ul>
-        <a href="/logout" class="btn navbar-link navbar-btn navbar-right">Logout</a></li>
-    </div>
+	<div class="container">
+		<div class="navbar-header">
+			<a class="navbar-brand" href="#">
+				Hirondu
+			</a>
+		</div>
+		<ul class="nav navbar-nav">
+			<li><a href="/timeline">Timeline</a></li>
+			<li><a href="/profile">My Profile</a></li>
+		</ul>
+		<a href="/logout" class="btn navbar-link navbar-btn navbar-right">Logout</a></li>
+	</div>
 </nav>
 <div class="container">
-    <div class="page-header">
-        <h1> Welcome home, <%- user.username %>!</h1>
-    </div>
-    <div class="panel panel-default">
-        <div class="panel-heading">
-            <h3>About you</h3>
-        </div>
-        <div class="panel-body">
-            <table class="table">
-                <% var stats = ['Username', 'Email', 'Verified']; %>
-                <% for(var prop in stats) { %>
-                    <tr>
-                        <td><%= stats[prop]%></td>
-                        <td><%= user[stats[prop].toLowerCase()]%></td>
-                    </tr>
-                <% } %>
-            </table>
-        </div>
-    </div>
+	<div class="page-header">
+		<h1> Welcome home, <%- user.username %>!</h1>
+	</div>
+	<div class="panel panel-default">
+		<div class="panel-heading">
+			<h3>Tweet your heart out!</h3>
+		</div>
+		<div class="panel-body">
+			<form id="tweet-form" class="form-group" action="/tweet" method="post">
+				<label for="content">Tweet:</label>
+				<textarea name="content" class="form-control" maxlength="140" rows="5" id="content"></textarea>
+
+				<label for="location">Location:</label>
+				<textarea name="location" class="form-control" maxlength="30" rows="1" id="location"></textarea>
+
+				<br>
+				<button type="button" id="tweet-submit" tabindex="4" class="form-control btn btn-primary" onclick="submitTweet()">Tweet</button>
+				<span id="info_message">test</span>
+			</form>
+		</div>
+	</div>
 </div>
+
+<script>
+	function submitTweet(){
+		$.ajax({
+			url: '/tweet',
+			type: 'post',
+			dataType: 'json',
+			data: $('form#tweet-form').serialize(),
+			statusCode: {
+				201: function() {
+					$('#info_message').removeClass('error').addClass('success').text('Tweet successful!');
+				},
+				500: function () {
+					$('#info_message').removeClass('success').addClass('error').text('Could not tweet :(');
+				}
+			}
+		});
+	}
+</script>
+
 <% include footer %>
