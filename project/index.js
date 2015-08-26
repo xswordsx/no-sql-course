@@ -48,6 +48,7 @@ function setupApp (app) {
 		var registerRouter = require('./routes/register');
 		var tweetRouter = require('./routes/tweet');
 		var followRouter = require('./routes/follow');
+		var timelineRouter = require('./routes/timeline');
 	} catch(e) {
 		console.error(e.message, e.stack);
 		cleanup(-2);
@@ -59,6 +60,7 @@ function setupApp (app) {
 	app.use('/register', registerRouter);
 	app.use('/tweet', ensureLoggedIn, tweetRouter);
 	app.use('/actions', ensureLoggedIn, followRouter);
+	app.use('/timeline', ensureLoggedIn, timelineRouter);
 
 	app.get('/', ensureLoggedIn, function (req, res) {
 		res.render('index', {
@@ -73,15 +75,15 @@ function setupApp (app) {
 	});
 
 	// catch errors
-	app.use(function(err, req, res, next) {
-		if(err.message) {
-			err.message = JSON.stringify(err.message);
-			err.title = err.title || 'Hirundo - Error';
-			res.render('error', err);
-		} else {
-			res.render('403', {title: 'Forbidden'});
-		}
-	});
+	//app.use(function(err, req, res, next) {
+	//	if(err) {
+	//		err.message = JSON.stringify(err);
+	//		err.title = err.title || 'Hirundo - Error';
+	//		res.render('error', err);
+	//	} else {
+	//		res.render('403', {title: 'Forbidden'});
+	//	}
+	//});
 }
 
 function cleanup (x) {

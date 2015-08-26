@@ -1,0 +1,21 @@
+<% include header %>
+
+<div id="tweets" class="container">
+
+</div>
+
+<script>
+    $('document').ready(function() {
+
+        var reload = function () {
+            $.get('/timeline/list', function (data) {
+                $("#tweets").html(data);
+            });
+        };
+
+        reload();
+        setInterval(reload, 30000);
+    });
+</script>
+
+<% include footer %>
