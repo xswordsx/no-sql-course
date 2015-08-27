@@ -1,17 +1,45 @@
 <% include header %>
 
-<div id="tweets" class="container">
-
+<div class="container">
+    <div class="panel panel-default">
+        <div id="tags" class="panel-body">Tags: <span style="color: grey">None</span></div>
+        <div id="tags" class="panel-footer">
+            <button type="button" class="btn btn-danger" onclick="clearList()">Clear tags</button>
+        </div>
+    </div>
+    <div id="tweets"></div>
 </div>
 
 <script>
-    $('document').ready(function() {
 
-        var reload = function () {
-            $.get('/timeline/list', function (data) {
-                $("#tweets").html(data);
+    var tags_list = [];
+
+    function query(x) {
+        tags_list.push(x);
+        tags_list = $.unique(tags_list);
+        var html_tags = tags_list.map(function(x) { return '<span class="label label-default">' + x + '</span>'});
+        $('#tags').html("Tags: " + html_tags.join(' '));
+        reload();
+    }
+
+    function reload() {
+        $.post('/timeline/list', {tags: tags_list}, function (data) {
+            console.log('gh');
+            var newData = data.replace(/\&\#0?39;/g, "\'");
+            newData = newData.replace(/\#\w+/g, function(ht) {
+                return '<a href=# onclick="query(\'' + ht + '\')">' + ht + '</a>'
             });
-        };
+            $("#tweets").html(newData);
+        });
+    };
+
+    function clearList() {
+        tags_list = [];
+        $('#tags').html('Tags: <span style="color: grey">None</span>');
+        reload();
+    }
+
+    $('document').ready(function() {
 
         reload();
         setInterval(reload, 30000);

@@ -5,20 +5,29 @@ var User = require('../models/user');
 var router = express.Router();
 /* GET Login page */
 
-router.get('/list', function (req, res) {
+router.post('/list', function (req, res) {
 	User.findOne({_id: req.user._id}, function (err, doc) {
 		if(err) {
 			res.status(500).end(err);
 		} else {
-			Message.find({author: {$in: doc.following}})
+
+			var criteria = {
+				author: { $in: doc.following }
+			};
+
+			if(req.body && req.body.tags && req.body.tags.length > 0) {
+				criteria.tags = { $all: req.body.tags };
+			}
+
+			Message.find(criteria)
 				.sort({published: -1})
 				.limit(50)
 				.populate('author', 'username')
 				.exec(function (err, messages) {
 					if(err) {
-						res.status(500).end();
+						res.status(500).end(JSON.stringify(err));
 					} else {
-						res.render('timeline_list', {user: doc, messages: messages});
+						res.status(200).render('timeline_list', {user: doc, messages: messages});
 					}
 				});
 		}
